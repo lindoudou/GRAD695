@@ -1,0 +1,68 @@
+---
+title: "GRAD695"
+author: "Zhulin Li"
+date: "8/3/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+#Income data - STEP 1 Preparation
+#Research questions: 
+How does income vary by industry? 
+
+#STEP 2 Exploratory Data Analysis
+```{r}
+library(ggplot2)
+library(corrgram)
+library(corrplot)
+library(readr) 
+income=read.csv("income.csv")
+```
+```{r}
+head(income)
+str(income)
+summary(income)
+```
+```{r}
+par(mfrow=c(3,2))
+hist(income$All_workers, main="Histogram for All_works", xlab="All_workers",  col="gray")
+hist(income$All_weekly, main="Histogram for All_weekly", xlab="All_weekly",  col="gray")
+hist(income$M_workers, main="Histogram for M_workers", xlab="M_workers",  col="gray")
+hist(income$M_weekly, main="Histogram for M_weekly", xlab="M_weekly",  col="gray")
+hist(income$F_workers, main="Histogram for F_workers", xlab="F_workers",  col="gray")
+hist(income$F_weekly, main="Histogram for F_weekly", xlab="F_weekly",  col="gray")
+```
+```{r}
+#correlation 
+df <- income[ -c(1,2) ]
+df
+table_correlation <- cor(df)
+View(table_correlation)
+
+corrplot(cor(df), method="color", addCoef.col = "grey")
+
+```
+
+#STEP 3 Regression Analysis
+```{r}
+model_all <- lm(income$All_weekly ~ income$Industry , data = income)
+summary(model_all)
+```
+
+```{r}
+library(rcompanion)
+qqnorm(income$All_weekly)
+qqline(income$All_weekly, col="red")
+```
+By fitting a linear regression, the Adjusted R2 is 59.6% - meaning about 59.6% of the data can be explained/predicted using this model. Most of the industries are significant in the model. 
+
+#STEP 4 Conclusion
+```{r}
+
+```
+
+
